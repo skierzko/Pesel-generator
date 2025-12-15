@@ -6,10 +6,10 @@ import axios from 'axios';
 
 const props = defineProps<{
     options: {
-        years: Array<{ start: number; end: number; }>;
+        years: Array<{ name: string; start: number; end: number; }>;
         months: Array<{ name: string; value: number; }>;
         days: Array<{ name: string; value: number; }>;
-        gender: Array<{ name: string; value: string; }>;
+        gender: Array<{ name: string|number; value: string; }>;
     },
 }>()
 
@@ -26,6 +26,9 @@ const form = ref({
     gender: 'M',
 });
 
+const pesel = ref<string | null>(null);
+const loading = ref<boolean>(false);
+
 const isActive = (value, valueForm) => {
     return value === valueForm;
 };
@@ -35,17 +38,24 @@ const daysInMonth = (year, month) => {
 }
 
 const generate = async () => {
-    await axios.post('/generator', {
+    const response = await axios.post('/generator', {
         year: form.value.year.start,
         month: form.value.month.start,
         day: form.value.day.start,
         gender: form.value.gender
     });
+
+    if (response) {
+        pesel.value = response.data.pesel;
+    }
 };
+
+generate();
 
 watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth]) => {
     const days = daysInMonth(newYear, newMonth);
-    props.options.days = Array.from({ length: days }, (_, i) => ({ name: (i + 1).toString(), value: i + 1 }));
+    const preparedDays = Array.from({ length: days }, (_, i) => ({ name: (i + 1).toString(), value: i + 1 }));
+    props.options.days = props.options.days.splice(0, 1).concat(preparedDays); ;
 
     if (form.value.day.start > days) {
         form.value.day.start = days;
@@ -92,7 +102,12 @@ watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth
                         ]"
                         @click="form.year.start = year.start"
                     >
-                        {{ year.start }} - {{ year.end }}
+                        <div v-if="year.start !== 0">{{ year.name }}</div>
+                        <div v-else>
+                            <svg class="inline relative top-[-2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+                            </svg>
+                        </div>
                     </li>
                 </ul>
             </section>
@@ -118,7 +133,12 @@ watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth
                         ]"
                         @click="form.month.start = month.value"
                     >
-                        {{ month.name }}
+                        <div v-if="month.value !== 0">{{ month.name }}</div>
+                        <div v-else>
+                            <svg class="inline relative top-[-2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+                            </svg>
+                        </div>
                     </li>
                 </ul>
             </section>
@@ -144,7 +164,12 @@ watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth
                         ]"
                         @click="form.day.start = day.value"
                     >
-                        {{ day.name }}
+                        <div v-if="day.value !== 0">{{ day.name }}</div>
+                        <div v-else>
+                            <svg class="inline relative top-[-2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+                            </svg>
+                        </div>
                     </li>
                 </ul>
             </section>
@@ -170,7 +195,12 @@ watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth
                         ]"
                         @click="form.gender = gender.value"
                     >
-                        {{ gender.name }}
+                        <div v-if="gender.value !== 0">{{ gender.name }}</div>
+                        <div v-else>
+                            <svg class="inline relative top-[-2px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+                            </svg>
+                        </div>
                     </li>
                 </ul>
             </section>
@@ -199,7 +229,7 @@ watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth
                     </div>
                     <div>
                         <p class="p-4 bg-gray-200 rounded-sm cursor-pointer">
-                            <span class="h-[37px] inline-block font-mono text-5xl leading-none">92091111111</span>
+                            <span class="h-[37px] inline-block font-mono text-5xl leading-none">{{ pesel }}</span>
                         </p>
                     </div>
                     <div>
