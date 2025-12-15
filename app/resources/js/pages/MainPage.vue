@@ -61,6 +61,10 @@ watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth
         form.value.day.start = days;
     }
 });
+
+watch(() => [form], ([newYear, newMonth]) => {
+
+});
 </script>
 
 <template>
@@ -77,7 +81,7 @@ watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth
             <section class="flex-1 p-4">
                 <p>
                     <span class="font-bold">Let's get started!</span>
-                    Semonthlect the settings below and generate a sample PESEL number.
+                    Select the settings below and generate a sample PESEL number.
                 </p>
             </section>
 
