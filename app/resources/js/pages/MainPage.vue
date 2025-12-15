@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import axios from 'axios';
-
 
 const props = defineProps<{
     options: {
@@ -26,6 +25,7 @@ const form = ref({
     gender: 'M',
 });
 
+const isDark = ref(false)
 const pesel = ref<string | null>(null);
 const loading = ref<boolean>(false);
 
@@ -63,8 +63,12 @@ watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth
 });
 
 watch(() => [form], ([newYear, newMonth]) => {
+    generate();
+}, { deep: true });
 
-});
+watchEffect(() => {
+  document.documentElement.classList.toggle('dark', isDark.value)
+})
 </script>
 
 <template>
@@ -73,8 +77,21 @@ watch(() => [form], ([newYear, newMonth]) => {
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
     <div class="main">
-        <section class="p-4 text-2xl bg-sky-600 text-white">
-            Pesel generator
+        <section class="flex gap-4 p-4 text-2xl bg-sky-600 text-white items-center">
+            <div>Pesel generator</div>
+            <div class="flex" @click="isDark = !isDark">
+                <div class="p-1 rounded-sm" :class="[! isDark && 'bg-sky-500']">
+                    <svg class="inline relative top-[-2px] cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5V3m0 18v-2M7.05 7.05 5.636 5.636m12.728 12.728L16.95 16.95M5 12H3m18 0h-2M7.05 16.95l-1.414 1.414M18.364 5.636 16.95 7.05M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
+                    </svg>
+                </div>
+                <div class="p-1 rounded-sm" :class="[isDark && 'bg-sky-500']">
+                    <svg class="inline relative top-[-2px] cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 0 1-.5-17.986V3c-.354.966-.5 1.911-.5 3a9 9 0 0 0 9 9c.239 0 .254.018.488 0A9.004 9.004 0 0 1 12 21Z"/>
+                    </svg>
+                </div>
+                
+            </div>
         </section>
 
         <div class="grid grid-cols-1 justify-center">
@@ -100,9 +117,10 @@ watch(() => [form], ([newYear, newMonth]) => {
                             bg-gray-200 p-2 no-warp whitespace-nowrap border-r border-gray-500 cursor-pointer
                             last:border-0
                             hover:bg-sky-600 hover:text-white
+                            dark:bg-gray-600
                         "
                         :class="[
-                            isActive(year.start, form.year.start) && 'bg-sky-600 text-white'
+                            isActive(year.start, form.year.start) && '!bg-sky-600 text-white'
                         ]"
                         @click="form.year.start = year.start"
                     >
@@ -131,9 +149,10 @@ watch(() => [form], ([newYear, newMonth]) => {
                             bg-gray-200 p-2 no-warp whitespace-nowrap border-r border-gray-500 cursor-pointer
                             last:border-0
                             hover:bg-sky-600 hover:text-white
+                            dark:bg-gray-600
                         "
                         :class="[
-                            isActive(month.value, form.month.start) && 'bg-sky-600 text-white'
+                            isActive(month.value, form.month.start) && '!bg-sky-600 text-white'
                         ]"
                         @click="form.month.start = month.value"
                     >
@@ -162,9 +181,10 @@ watch(() => [form], ([newYear, newMonth]) => {
                             bg-gray-200 p-2 no-warp whitespace-nowrap border-r border-gray-500 cursor-pointer
                             last:border-0
                             hover:bg-sky-600 hover:text-white
+                            dark:bg-gray-600
                         "
                         :class="[
-                            isActive(day.value, form.day.start) && 'bg-sky-600 text-white'
+                            isActive(day.value, form.day.start) && '!bg-sky-600 text-white'
                         ]"
                         @click="form.day.start = day.value"
                     >
@@ -193,9 +213,10 @@ watch(() => [form], ([newYear, newMonth]) => {
                             bg-gray-200 p-2 no-warp whitespace-nowrap border-r border-gray-500 cursor-pointer
                             last:border-0
                             hover:bg-sky-600 hover:text-white
+                            dark:bg-gray-600
                         "
                         :class="[
-                            isActive(gender.value, form.gender) && 'bg-sky-600 text-white'
+                            isActive(gender.value, form.gender) && '!bg-sky-600 text-white'
                         ]"
                         @click="form.gender = gender.value"
                     >
@@ -221,7 +242,7 @@ watch(() => [form], ([newYear, newMonth]) => {
                 
                 <div class="flex gap-4 items-center justify-center">
                     <div>
-                        <div class="inline-block bg-gray-100 p-2 rounded-sm cursor-pointer">
+                        <div class="inline-block bg-gray-100 p-2 rounded-sm cursor-pointer dark:bg-gray-400">
                             <svg class="inline relative top-[-2px] w-[34px] h-[34px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 5h6m-6 4h6M10 3v4h4V3h-4Z"/>
                             </svg>
@@ -232,7 +253,7 @@ watch(() => [form], ([newYear, newMonth]) => {
                         </div>
                     </div>
                     <div>
-                        <p class="p-4 bg-gray-200 rounded-sm cursor-pointer">
+                        <p class="p-4 bg-gray-200 rounded-sm cursor-pointer dark:bg-gray-600">
                             <span class="h-[37px] inline-block font-mono text-5xl leading-none">{{ pesel }}</span>
                         </p>
                     </div>
@@ -249,3 +270,14 @@ watch(() => [form], ([newYear, newMonth]) => {
         </div>
     </div>
 </template>
+
+<style type="scss">
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark body {
+    background-color: var(--color-gray-900);
+    color: white;
+}
+</style>
