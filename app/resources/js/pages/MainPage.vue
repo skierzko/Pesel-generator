@@ -52,6 +52,14 @@ const generate = async () => {
 
 generate();
 
+const copyToClipboard = async () => {
+    if (!pesel.value) {
+        return;
+    }
+
+    await navigator.clipboard.writeText(pesel.value);
+}
+
 watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth]) => {
     const days = daysInMonth(newYear, newMonth);
     const preparedDays = Array.from({ length: days }, (_, i) => ({ name: (i + 1).toString(), value: i + 1 }));
@@ -242,7 +250,7 @@ watchEffect(() => {
                 
                 <div class="flex gap-4 items-center justify-center">
                     <div>
-                        <div class="inline-block bg-gray-100 p-2 rounded-sm cursor-pointer dark:bg-gray-400">
+                        <div class="inline-block bg-gray-100 p-2 rounded-sm cursor-pointer dark:bg-gray-400" @click="copyToClipboard">
                             <svg class="inline relative top-[-2px] w-[34px] h-[34px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 5h6m-6 4h6M10 3v4h4V3h-4Z"/>
                             </svg>
@@ -253,7 +261,7 @@ watchEffect(() => {
                         </div>
                     </div>
                     <div>
-                        <p class="p-4 bg-gray-200 rounded-sm cursor-pointer dark:bg-gray-600">
+                        <p class="p-4 bg-gray-200 rounded-sm cursor-pointer dark:bg-gray-600" @click="copyToClipboard">
                             <span class="h-[37px] inline-block font-mono text-5xl leading-none">{{ pesel }}</span>
                         </p>
                     </div>
