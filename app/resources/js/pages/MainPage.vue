@@ -25,7 +25,8 @@ const form = ref({
     gender: 'M',
 });
 
-const isDark = ref(false)
+const isDark = ref(false);
+const isCopied = ref(false);
 const pesel = ref<string | null>(null);
 const loading = ref<boolean>(false);
 
@@ -58,6 +59,9 @@ const copyToClipboard = async () => {
     }
 
     await navigator.clipboard.writeText(pesel.value);
+
+    isCopied.value = true;
+    setTimeout(() => isCopied.value = false, 1000);
 }
 
 watch(() => [form.value.year.start, form.value.month.start], ([newYear, newMonth]) => {
@@ -264,6 +268,7 @@ watchEffect(() => {
                         <p class="p-4 bg-gray-200 rounded-sm cursor-pointer dark:bg-gray-600" @click="copyToClipboard">
                             <span class="h-[37px] inline-block font-mono text-5xl leading-none">{{ pesel }}</span>
                         </p>
+                        <p v-if="isCopied" class="h-[0px] text-center">Copied to clipboard</p>
                     </div>
                     <div>
                         <div class="inline-block bg-lime-400 p-2 rounded-sm cursor-pointer" @click="generate">
