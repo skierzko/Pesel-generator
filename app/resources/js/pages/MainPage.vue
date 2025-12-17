@@ -248,7 +248,7 @@ watchEffect(() => {
                 </ul>
             </section>
 
-            <section class="flex-1 p-4">
+            <section class="flex-1 p-4 mb-8">
                 <p class="text-2xl mb-4">
                     Generated PESEL number
                     <svg class="inline relative top-[-2px] w-[34px] h-[34px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -274,7 +274,7 @@ watchEffect(() => {
                         <p class="p-4 bg-gray-200 rounded-sm cursor-pointer dark:bg-gray-600" @click="copyToClipboard">
                             <span class="h-[37px] inline-block font-mono text-5xl leading-none">{{ pesel }}</span>
                         </p>
-                        <p v-if="isCopied" class="h-[0px] text-center">Copied to clipboard</p>
+                        <p v-if="isCopied" class="text-center h-[0px]" :class="[isThrottled && 'relative top-[20px]']">Copied to clipboard</p>
                         <p v-if="isThrottled" class="h-[0px] text-center text-red-800">You can only generate 25 numbers per minute</p>
                     </div>
                     <div>
