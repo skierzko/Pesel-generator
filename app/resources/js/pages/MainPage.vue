@@ -28,6 +28,7 @@ const form = ref({
 const isDark = ref(false);
 const isCopied = ref(false);
 const pesel = ref<string | null>(null);
+const isThrottled = ref(false);
 const loading = ref<boolean>(false);
 
 const isActive = (value, valueForm) => {
@@ -44,10 +45,13 @@ const generate = async () => {
         month: form.value.month.start,
         day: form.value.day.start,
         gender: form.value.gender
+    }).catch(() => {
+        isThrottled.value = true;
     });
 
     if (response) {
         pesel.value = response.data.pesel;
+        isThrottled.value = false;
     }
 };
 
@@ -271,6 +275,7 @@ watchEffect(() => {
                             <span class="h-[37px] inline-block font-mono text-5xl leading-none">{{ pesel }}</span>
                         </p>
                         <p v-if="isCopied" class="h-[0px] text-center">Copied to clipboard</p>
+                        <p v-if="isThrottled" class="h-[0px] text-center text-red-800">You can only generate 25 numbers per minute</p>
                     </div>
                     <div>
                         <div class="inline-block bg-lime-400 p-2 rounded-sm cursor-pointer" @click="generate">

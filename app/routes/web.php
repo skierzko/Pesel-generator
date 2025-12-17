@@ -5,4 +5,4 @@ use Inertia\Inertia;
 use App\Http\Controllers\PeselController;
 
 Route::get('/', [PeselController::class, 'index'])->name('main-page');
-Route::post('/generator', [PeselController::class, 'generator'])->name('generator');
+Route::middleware('throttle:25,1')->post('/generator', [PeselController::class, 'generator'])->name('generator');
