@@ -255,11 +255,31 @@ watchEffect(() => {
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M21 13v-2a1 1 0 0 0-1-1h-.757l-.707-1.707.535-.536a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0l-.536.535L14 4.757V4a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v.757l-1.707.707-.536-.535a1 1 0 0 0-1.414 0L4.929 6.343a1 1 0 0 0 0 1.414l.536.536L4.757 10H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h.757l.707 1.707-.535.536a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l.536-.535 1.707.707V20a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-.757l1.707-.708.536.536a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-.535-.536.707-1.707H20a1 1 0 0 0 1-1Z"/>
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                     </svg>
-
                 </p>
-                
-                <div class="flex gap-4 items-center justify-center">
+
+                <div class="flex gap-2 space-y-2 sm:hidden">
                     <div>
+                        <div class="inline-block bg-gray-100 p-2 rounded-sm cursor-pointer dark:bg-gray-400" @click="copyToClipboard">
+                            <svg class="inline relative top-[-2px] w-[34px] h-[34px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 5h6m-6 4h6M10 3v4h4V3h-4Z"/>
+                            </svg>
+
+                            <svg hidden class="inline relative top-[-2px] w-[34px] h-[34px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 7 2 2 4-4m-5-9v4h4V3h-4Z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="block sm:hidden">
+                        <div class="inline-block bg-lime-400 p-2 rounded-sm cursor-pointer" @click="generate">
+                            <svg class="inline relative top-[-2px] w-[34px] h-[34px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sm:flex gap-4 items-center justify-center">
+                    <div class="hidden sm:block">
                         <div class="inline-block bg-gray-100 p-2 rounded-sm cursor-pointer dark:bg-gray-400" @click="copyToClipboard">
                             <svg class="inline relative top-[-2px] w-[34px] h-[34px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-6 5h6m-6 4h6M10 3v4h4V3h-4Z"/>
@@ -277,7 +297,7 @@ watchEffect(() => {
                         <p v-if="isCopied" class="text-center h-[0px]" :class="[isThrottled && 'relative top-[20px]']">Copied to clipboard</p>
                         <p v-if="isThrottled" class="h-[0px] text-center text-red-800">You can only generate 25 numbers per minute</p>
                     </div>
-                    <div>
+                    <div class="hidden sm:block">
                         <div class="inline-block bg-lime-400 p-2 rounded-sm cursor-pointer" @click="generate">
                             <svg class="inline relative top-[-2px] w-[34px] h-[34px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"/>
@@ -290,8 +310,12 @@ watchEffect(() => {
 
             <hr class="m-4 opacity-20" />
 
-            <section class="p-4 text-gray-400">
-                Created by Sylwester Kierzkowski | 2025 | <a href="https://kierzkowski.net">kierzkowski.net</a>
+            <section class="mt-8 p-4 bg-sky-600 text-white text-center border-t-2 border-t-green-800">
+                © 2026 Sylwester Kierzkowski
+                <br />
+                Designed and developed by Sylwester Kierzkowski. This project is open for copying, modification, and use for any purpose.
+                <br />
+                Go to my portfolio: <a href="https://kierzkowski.net" target="blank">kierzkowski.net</a>
             </section>
         </div>
     </div>
